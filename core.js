@@ -8,12 +8,12 @@ define(function(require) {
     this.targetid = targetid
     this.entities = []
     this.layers = []
+    this.canvas = document.getElementById(this.targetid)
+    this.context = this.canvas.getContext('2d')
   }
 
   Runner.prototype = {
     start: function() {
-      this.canvas = document.getElementById(this.targetid)
-      this.context = this.canvas.getContext('2d')
       this.raise('init')
       setInterval(_.bind(this.tick, this), 1000/30)
     },
