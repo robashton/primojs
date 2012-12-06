@@ -41,8 +41,8 @@ define(function(require) {
       this.render()
     },
     render: function() {
-      this.camera.begin()
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
+      this.camera.begin()
       var i = 0
       for(i = 0; i < this.layers.length; i++)
         this.layers[i].render(this.context)

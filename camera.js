@@ -48,6 +48,11 @@ define(function(require) {
       this.distance = z
       this.updateViewport()
     },
+    move: function(x, y) {
+      this.lookat[0] += x 
+      this.lookat[1] += y
+      this.updateViewport()
+    },
     moveTo: function(x, y) {
       this.lookat[0] = x
       this.lookat[1] = y
@@ -55,14 +60,14 @@ define(function(require) {
     },
     screenToWorld: function(x, y, obj) {
       obj = obj || {}
-      obj.x = (x / this.viewport.scale[0]) + this.viewport.left
-      obj.y = (y / this.viewport.scale[1]) + this.viewport.top
+      obj.worldx = (x / this.viewport.scale[0]) + this.viewport.left
+      obj.worldy = (y / this.viewport.scale[1]) + this.viewport.top
       return obj
     },
     worldToScreen: function(x, y, obj) {
       obj = obj || {}
-      obj.x = (x - this.viewport.left) * (this.viewport.scale[0])
-      obj.y = (y - this.viewport.top) * (this.viewport.scale[1])
+      obj.screenx = (x - this.viewport.left) * (this.viewport.scale[0])
+      obj.screeny = (y - this.viewport.top) * (this.viewport.scale[1])
       return obj      
     },
     makeTopLeftWorldCoords: function(x,y) {
