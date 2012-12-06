@@ -16,8 +16,7 @@ define(function(require) {
           var top = y * this.config.tilesize
           this.image.drawTo(context, 
             this.config.data[index], 
-            left, 
-            top); // TODO: Specify width 
+            left, top, this.config.tilesize, this.config.tilesize);
         }
       }
     }

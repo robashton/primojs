@@ -19,7 +19,7 @@ define(function(require) {
   }
 
   SpriteMap.prototype = {
-    drawTo: function(context, index,  x, y) {
+    drawTo: function(context, index,  x, y, width, height) {
 
       var delta = this.tilesize * index  
       var sx = delta % this.data.width
@@ -27,7 +27,7 @@ define(function(require) {
 
       context.drawImage(this.data, 
         sx, sy, this.tilesize, this.tilesize,
-        x, y, this.tilesize, this.tilesize)
+        x, y, width || this.tilesize, height || this.tilesize)
     }
   }
   return SpriteMap;
