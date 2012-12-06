@@ -23,7 +23,7 @@ define(function(require) {
       for(i = 0; i < level.entities.length; i++)
         this.spawnEntity(level.entities[i].type, level.entities[i].data)
       for(i = 0 ; i < level.layers.length; i++) {
-        this.layers.push(new Layer(this, level.layers[i]))
+        this.layers.push(new Layer(this, level, i))
       }
     },
     spawnEntity: function(Type, data)  {

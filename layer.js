@@ -1,22 +1,23 @@
 define(function(require) {
   var SpriteMap = require('./spritemap')
 
-  var Layer = function(engine, config) {
+  var Layer = function(engine, level, index) {
     this.engine = engine
-    this.tileset = config.tileset
-    this.config = config
+    this.level = level
+    this.config = this.level.layers[index]
+    this.tileset = this.config.tileset
     this.image = new SpriteMap(this.tileset.path, this.tileset.tilesize);
   }
   Layer.prototype = {
     render: function(context) {
-      for(var x = 0; x < this.config.width; x++) {
-        for(var y = 0; y < this.config.height; y++) {
-          var index = x + (y * this.config.width)
-          var left = x * this.config.tilesize
-          var top = y * this.config.tilesize
+      for(var x = 0; x < this.level.width; x++) {
+        for(var y = 0; y < this.level.height; y++) {
+          var index = x + (y * this.level.width)
+          var left = x * this.level.tilesize
+          var top = y * this.level.tilesize
           this.image.drawTo(context, 
             this.config.data[index], 
-            left, top, this.config.tilesize, this.config.tilesize);
+            left, top, this.level.tilesize, this.level.tilesize);
         }
       }
     }
