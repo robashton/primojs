@@ -2,6 +2,7 @@ define(function(require) {
   var Eventable = require('eventable')
   var _ = require('underscore')
   var Layer = require('./layer')
+  var Camera = require('./camera')
 
   var Runner = function(targetid) {
     Eventable.call(this)
@@ -10,6 +11,8 @@ define(function(require) {
     this.layers = []
     this.canvas = document.getElementById(this.targetid)
     this.context = this.canvas.getContext('2d')
+    this.camera = new Camera(this.context)
+    this.camera.makeTopLeftWorldCoords(0,0)
   }
 
   Runner.prototype = {
@@ -38,6 +41,7 @@ define(function(require) {
       this.render()
     },
     render: function() {
+      this.camera.begin()
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
       var i = 0
       for(i = 0; i < this.layers.length; i++)
@@ -46,6 +50,8 @@ define(function(require) {
       for(i = 0; i < this.entities.length ; i++) {
         this.entities[i].render(this.context)
       }
+
+      this.camera.end()
     }
   }
   _.extend(Runner.prototype, Eventable.prototype)
