@@ -3,6 +3,7 @@ define(function(require) {
   var _ = require('underscore')
   var Layer = require('./layer')
   var Camera = require('./camera')
+  var LevelLoader = require('./levelloader')
 
   var Runner = function(targetid) {
     Eventable.call(this)
@@ -20,7 +21,11 @@ define(function(require) {
       this.raise('init')
       setInterval(_.bind(this.tick, this), 1000/30)
     },
-    loadLevel: function(level) {
+    loadLevel: function(path) {
+      var loader = new LevelLoader(path)
+      loader.on('finished', this.onLevelLoaded, this)
+    },
+    onLevelLoaded: function(level) {
       this.entities = []
       var i = 0
       for(i = 0; i < level.entities.length; i++)
