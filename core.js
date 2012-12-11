@@ -25,7 +25,7 @@ define(function(require) {
       var loader = new LevelLoader(path)
       loader.on('finished', this.onLevelLoaded, this)
     },
-    onLevelLoaded: function(level) {
+    setLevel: function(level) {
       this.entities = []
       var i = 0
       for(i = 0; i < level.entities.length; i++)
@@ -33,6 +33,9 @@ define(function(require) {
       for(i = 0 ; i < level.layers.length; i++) {
         this.layers.push(new Layer(this, level, i))
       }
+    },
+    onLevelLoaded: function(level) {
+      this.setLevel(level)
     },
     spawnEntity: function(Type, data)  {
       var entity = new Type('entity-' + this.entities.length, data)
