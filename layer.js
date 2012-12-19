@@ -15,6 +15,8 @@ define(function(require) {
           var index = x + (y * this.level.width)
           var left = x * this.level.tilesize
           var top = y * this.level.tilesize
+          if(this.config.data[index] === null)
+            continue
           this.image.drawTo(context, 
             this.config.data[index], 
             left, top, this.level.tilesize, this.level.tilesize);
