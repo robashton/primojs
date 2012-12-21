@@ -34,10 +34,14 @@ define(function(require) {
     load: function() {
       $.getJSON(this.path, _.bind(this.onLevelReceived, this))
     },
+    layerCount: function() {
+      return this.data.layers.length
+    },
     onLevelReceived: function(rawdata) {
       this.rawdata = rawdata
       this.tilesets = {}
       this.entityTypes = {}
+      this.layers = []
       this.loadLayers()
       this.loadEntities()
       this.finished = true
@@ -77,22 +81,42 @@ define(function(require) {
     },
     tryFinish: function() {
       if(this.pendingResults === 0 && this.finished) {
-        this.raise('finished')
+        this.createLayers()
+        this.raise('loaded')
+      }
+    },
+    createLayers: function() {
+      for(var i = 0 ; i < this.rawdata.layers.length; i++) {
+        this.layers[i] = new Layer(this, i)
+      }
+    },
+    forEachLayer: function(cb) {
+      for(var i = 0 ; i < this.layers.length; i++) {
+        cb(this.layers[i])
       }
     },
     loadIntoGame: function(game) {
       game.reset()
       var i = 0
- 
       for(i = 0; i < this.rawdata.entities.length; i++) {
         var config = this.rawdata.entities[i]
         var type = this.entityTypes[config.type]
         game.spawnEntity(type, config.data)
       }
-
-      for(i = 0 ; i < this.rawdata.layers.length; i++) {
-        game.addLayer(new Layer(this, i))
-      }
+    },
+    indexForWorldCoords: function(x, y) {
+      var tilex = Math.floor(x / this.rawdata.tilesize)
+      var tiley = Math.floor(y / this.rawdata.tilesize)
+      var index = tilex + tiley * this.rawdata.width
+      return index
+    },
+    setTileAt: function(layer, x, y, tile) {
+      var index = this.indexForWorldCoords(x, y)
+      this.rawdata.layers[layer].data[index] = tile
+    },
+    getTileAt: function(layer, x, y, tile) {
+      var index = this.indexForWorldCoords(x, y)
+      return this.rawdata.layers[layer].data[index] 
     }
   }
 

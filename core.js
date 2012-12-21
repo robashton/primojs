@@ -23,7 +23,7 @@ define(function(require) {
     },
     loadLevel: function(path) {
       this.level = new Level(path)
-      this.level.on('finished', this.onLevelLoaded, this)
+      this.level.on('loaded', this.onLevelLoaded, this)
     },
     setLevel: function(level) {
       this.level = level
@@ -50,17 +50,24 @@ define(function(require) {
         this.entities[i].tick()
       this.render()
     },
+    renderLayer: function(layer) {
+      layer.render(this.context)
+    },
     render: function() {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
       this.camera.begin()
-      var i = 0
-      for(i = 0; i < this.layers.length; i++)
-        this.layers[i].render(this.context)
-
-      for(i = 0; i < this.entities.length ; i++) {
-        this.entities[i].render(this.context)
+      try {
+        this.level.forEachLayer(_.bind(this.renderLayer, this))
+        for(var i = 0; i < this.entities.length ; i++) {
+          this.entities[i].render(this.context)
+        }
       }
-      this.camera.end()
+      catch(ex) {
+        console.log("problem rendering scene", ex)
+      }
+      finally {
+        this.camera.end()
+      }
     }
   }
   _.extend(Runner.prototype, Eventable.prototype)
