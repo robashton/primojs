@@ -1,8 +1,7 @@
 define(function(require) {
   var SpriteMap = require('./spritemap')
 
-  var Layer = function(engine, level, index) {
-    this.engine = engine
+  var Layer = function(level, index) {
     this.level = level
     this.config = this.level.layers[index]
     this.tileset = this.config.tileset

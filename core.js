@@ -1,13 +1,13 @@
 define(function(require) {
   var Eventable = require('eventable')
   var _ = require('underscore')
-  var Layer = require('./layer')
   var Camera = require('./camera')
-  var LevelLoader = require('./levelloader')
+  var Level = require('./level')
 
   var Runner = function(targetid) {
     Eventable.call(this)
     this.targetid = targetid
+    this.level = null
     this.entities = []
     this.layers = []
     this.canvas = document.getElementById(this.targetid)
@@ -22,20 +22,19 @@ define(function(require) {
       setInterval(_.bind(this.tick, this), 1000/30)
     },
     loadLevel: function(path) {
-      var loader = new LevelLoader(path)
-      loader.on('finished', this.onLevelLoaded, this)
+      this.level = new Level(path)
+      this.level.on('finished', this.onLevelLoaded, this)
     },
     setLevel: function(level) {
-      this.entities = []
-      var i = 0
-      for(i = 0; i < level.entities.length; i++)
-        this.spawnEntity(level.entities[i].type, level.entities[i].data)
-      for(i = 0 ; i < level.layers.length; i++) {
-        this.layers.push(new Layer(this, level, i))
-      }
+      this.level = level
+      this.level.loadIntoGame(this)
     },
-    onLevelLoaded: function(level) {
-      this.setLevel(level)
+    onLevelLoaded: function() {
+      this.level.loadIntoGame(this)
+    },
+    reset: function() {
+      this.entities = []
+      this.layers = []
     },
     spawnEntity: function(Type, data)  {
       var entity = new Type('entity-' + this.entities.length, data)
@@ -58,7 +57,6 @@ define(function(require) {
       for(i = 0; i < this.entities.length ; i++) {
         this.entities[i].render(this.context)
       }
-
       this.camera.end()
     }
   }

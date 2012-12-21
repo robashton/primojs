@@ -2,6 +2,7 @@ define(function(require) {
   var Eventable = require('eventable')
   var _ = require('underscore')
   var $ = require('jquery')
+  var Layer = require('./layer')
 
   var Level = function(path) {
     Eventable.call(this)
@@ -61,15 +62,21 @@ define(function(require) {
     },
     tryFinish: function() {
       if(this.pendingResults === 0 && this.finished) {
-        this.mapEntityTypes()
-        this.raise('finished', this.level)
+        this.raise('finished')
       }
     },
-    mapEntityTypes: function() {
-      for(var i = 0; i < this.level.entities.length; i++) {
-        var entity = this.level.entities[i]
-        var type = this.entityTypes[entity.type]
-        entity.type = type
+    loadIntoGame: function(game) {
+      game.reset()
+      var i = 0
+
+      for(i = 0; i < this.rawdata.entities.length; i++) {
+        game.spawnEntity(
+          this.rawdata.entities[i].type, 
+          this.rawdata.level.entities[i].data)
+      }
+
+      for(i = 0 ; i < this.rawdata.layers.length; i++) {
+        game.addLayer(new Layer(this, i))
       }
     }
   }
