@@ -16,6 +16,21 @@ define(function(require) {
   }
 
   Level.prototype = {
+    width: function() {
+      return this.rawdata.width
+    },
+    height: function() {
+      return this.rawdata.height
+    },
+    tilesize: function() {
+      return this.rawdata.tilesize
+    },
+    layerdata: function(index) {
+      return this.rawdata.layers[index]
+    },
+    tileset: function(name) {
+      return this.tilesets[name]
+    },
     load: function() {
       $.getJSON(this.path, _.bind(this.onLevelReceived, this))
     },
@@ -29,24 +44,24 @@ define(function(require) {
       this.tryFinish()
     },
     loadLayers: function() {
-      for(var i = 0 ; i < this.level.layers.length; i++) 
+      for(var i = 0 ; i < this.rawdata.layers.length; i++) 
         this.loadLayer(i)
     },
     loadLayer: function(i) {
-      var layer = this.level.layers[i]
-      var tilesets = this.loadeddata
+      var layer = this.rawdata.layers[i]
+      var tilesets = this.tilesets
       this.require(layer.tileset, function(tileset) {
         tilesets[layer.tileset] = tileset
       })
     },
     loadEntities: function() {
-      for(var key in this.level.entityTypes)  {
+      for(var key in this.rawdata.entityTypes)  {
         this.loadEntity(key)
       }
     },
     loadEntity: function(key) {
-      var path = this.level.entityTypes[key]
-      var entities = this.entitiesTypes
+      var path = this.rawdata.entityTypes[key]
+      var entities = this.entityTypes
       this.require(path, function(type) {
         entities[key] = type
       })
@@ -68,11 +83,11 @@ define(function(require) {
     loadIntoGame: function(game) {
       game.reset()
       var i = 0
-
+ 
       for(i = 0; i < this.rawdata.entities.length; i++) {
-        game.spawnEntity(
-          this.rawdata.entities[i].type, 
-          this.rawdata.level.entities[i].data)
+        var config = this.rawdata.entities[i]
+        var type = this.entityTypes[config.type]
+        game.spawnEntity(type, config.data)
       }
 
       for(i = 0 ; i < this.rawdata.layers.length; i++) {

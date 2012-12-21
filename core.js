@@ -41,6 +41,9 @@ define(function(require) {
       this.entities.push(entity)
       return entity
     },
+    addLayer: function(layer) {
+      this.layers.push(layer)
+    },
     tick: function() {
       this.raise('tick')
       for(var i = 0; i < this.entities.length; i++)
