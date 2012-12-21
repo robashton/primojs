@@ -4,6 +4,7 @@ define(function(require) {
   var Layer = function(level, index) {
     this.level = level
     this.config = this.level.layerdata(index)
+    this.index = index
     this.image = new SpriteMap(this.tileset().path, this.tileset().tilesize);
   }
   Layer.prototype = {
