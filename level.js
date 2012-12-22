@@ -51,6 +51,12 @@ define(function(require) {
       for(var i = 0 ; i < this.rawdata.layers.length; i++) 
         this.loadLayer(i)
     },
+    addLayer: function(data) {
+      var i = this.rawdata.layers.length
+      this.rawdata.layers.push(data)
+      this.layers.push(new Layer(this, i))
+      this.loadLayer(i)
+    },
     loadLayer: function(i) {
       var layer = this.rawdata.layers[i]
       var tilesets = this.tilesets
