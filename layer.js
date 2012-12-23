@@ -5,7 +5,6 @@ define(function(require) {
     this.level = level
     this.config = this.level.layerdata(index)
     this.index = index
-    this.image = new SpriteMap(this.tileset().path, this.tileset().tilesize);
     this.hidden = false
   }
   Layer.prototype = {
@@ -27,6 +26,9 @@ define(function(require) {
     show: function() {
       this.hidden = false
     },
+    spritemap: function() {
+      return this.level.spritemap(this.config.tileset)
+    },
     render: function(context) {
       if(this.hidden) return
       for(var x = 0; x < this.level.width() ; x++) {
@@ -38,7 +40,7 @@ define(function(require) {
           if(this.config.data[index] === null)
             continue
 
-          this.image.drawTo(context, 
+          this.spritemap().drawTo(context, 
             this.config.data[index], 
             left, top, this.level.tilesize(), this.level.tilesize());
         }

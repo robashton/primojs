@@ -3,12 +3,14 @@ define(function(require) {
   var _ = require('underscore')
   var $ = require('jquery')
   var Layer = require('./layer')
+  var SpriteMap = require('./spritemap')
 
   var Level = function(path) {
     Eventable.call(this)
     this.path = path
     this.rawdata = null
     this.tilesets = {}
+    this.spritemaps = {}
     this.entityTypes = {}
     this.pendingResults = 0
     this.finished = false
@@ -30,6 +32,9 @@ define(function(require) {
     },
     tileset: function(name) {
       return this.tilesets[name]
+    },
+    spritemap: function(name) {
+      return this.spritemaps[name]
     },
     load: function() {
       $.getJSON(this.path, _.bind(this.onLevelReceived, this))
@@ -60,8 +65,10 @@ define(function(require) {
     loadLayer: function(i) {
       var layer = this.rawdata.layers[i]
       var tilesets = this.tilesets
+      var spritemaps = this.spritemaps
       this.require(layer.tileset, function(tileset) {
         tilesets[layer.tileset] = tileset
+        spritemaps[layer.tileset] = new SpriteMap(tileset.path, tileset.tilesize)
       })
     },
     loadEntities: function() {
