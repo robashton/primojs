@@ -108,6 +108,23 @@ define(function(require) {
         cb(this.layers[i])
       }
     },
+    addEntity: function(x, y, path, Type) {
+      var type = this.registerEntityType(path, Type)
+      this.rawdata.entities.push({
+        type: type,
+        data: {
+          x: x,
+          y: y
+        }
+      })
+    },
+    registerEntityType: function(path, Type) {
+      var lastSlash = path.lastIndexOf('/')
+      var type = path.substr(lastSlash+1, path.length - (lastSlash+1))
+      this.entityTypes[type] = Type
+      this.rawdata.entityTypes[type] = path
+      return type
+    },
     loadIntoGame: function(game) {
       game.reset()
       var i = 0
