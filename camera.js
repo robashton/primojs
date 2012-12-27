@@ -60,6 +60,8 @@ define(function(require) {
     },
     screenToWorld: function(x, y, obj) {
       obj = obj || {}
+      x -= this.context.canvas.offsetLeft
+      y -= this.context.canvas.offsetTop
       obj.worldx = (x / this.viewport.scale[0]) + this.viewport.left
       obj.worldy = (y / this.viewport.scale[1]) + this.viewport.top
       return obj
