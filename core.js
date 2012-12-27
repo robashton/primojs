@@ -53,6 +53,18 @@ define(function(require) {
     renderLayer: function(layer) {
       layer.render(this.context)
     },
+    entityAt: function(worldx, worldy) {
+      // TODO: Spacial hash for even this
+      for(var i = 0; i < this.entities.length; i++) {
+        var entity = this.entities[i]
+        if(entity.x > worldx) continue
+        if(entity.y > worldy) continue
+        if(entity.x + entity.width < worldx) continue
+        if(entity.y + entity.height < worldy) continue
+        return entity
+      }
+      return null
+    },
     render: function() {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
       this.camera.begin()

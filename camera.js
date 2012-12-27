@@ -68,6 +68,8 @@ define(function(require) {
       obj = obj || {}
       obj.screenx = (x - this.viewport.left) * (this.viewport.scale[0])
       obj.screeny = (y - this.viewport.top) * (this.viewport.scale[1])
+      obj.screenx += this.context.canvas.offsetLeft
+      obj.screeny += this.context.canvas.offsetTop
       return obj      
     },
     makeTopLeftWorldCoords: function(x,y) {
