@@ -78,6 +78,12 @@ define(function(require) {
       this.lookat[0] = x + (this.viewport.width/2.0)
       this.lookat[1] = x + (this.viewport.height/2.0)
       this.updateViewport()
+    },
+    scalex: function() {
+      return this.viewport.scale[0]
+    },
+    scaley: function() {
+      return this.viewport.scale[1]
     }
   }
 
