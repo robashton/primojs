@@ -9,6 +9,7 @@ define(function(require) {
     this.filename = data.path
     this.tilesize = data.tilesize
     this.tiles = data.tiles
+    this.collisionmapsize = 0
     this.collisionMaps = []
     this.data = new Image()
     this.data.src = this.filename
@@ -34,6 +35,7 @@ define(function(require) {
           function() { 
             this.generateCollisionMaps(width, height) }, this)
 
+      this.collisionmapsize = width
       var canvas = new MemoryCanvas(width, height)
       for(var name in this.tiles) {
         var index = this.tiles[name]
@@ -41,6 +43,11 @@ define(function(require) {
         this.drawTo(canvas.context, index, 0, 0, width, height)
         this.collisionMaps[index] = canvas.createMap()
       }
+    },
+    hasPixelAt: function(index, x, y) {
+      if(!this.loaded) return false
+      var map = this.collisionMaps[index]
+      return map[x + y * this.collisionmapsize]
     },
     onLoaded: function() {
       this.loaded = true

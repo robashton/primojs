@@ -26,6 +26,11 @@ define(function(require) {
       }
       return !!this.config.collision
     },
+    solidAt: function(tilex, tiley) {
+      var index = this.config.data[tilex + tiley * this.level.width()]
+      if(index === null) return false
+      return this.spritemap().hasPixelAt(index, tilex, tiley)
+    },
     hide: function() {
       this.hidden = true
     },

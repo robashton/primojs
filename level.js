@@ -39,8 +39,15 @@ define(function(require) {
     load: function() {
       $.getJSON(this.path, _.bind(this.onLevelReceived, this))
     },
-    iscollision: function() {
-
+    solidAt: function(worldx, worldy) {
+      // TODO: Look this up from a pre-computed map
+      var tilex = parseInt(worldx / this.rawdata.tilesize , 10)
+      var tiley = parseInt(worldy / this.rawdata.tilesize , 10)
+      for(var i = 0 ; i < this.layers.length; i++) {
+        var layer = this.layers[i]
+        if(layer.iscollision() && layer.solidAt(tilex, tiley)) return true
+      }
+      return false
     },
     layerCount: function() {
       return this.data.layers.length
