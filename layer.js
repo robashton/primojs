@@ -20,6 +20,12 @@ define(function(require) {
     getTileAt: function(x, y, tile) {
       return this.level.getTileAt(this.index, x, y, tile)
     },
+    iscollision: function(value) {
+      if(typeof value !== 'undefined') {
+        this.config.collision = value
+      }
+      return !!this.config.collision
+    },
     hide: function() {
       this.hidden = true
     },

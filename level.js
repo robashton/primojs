@@ -39,6 +39,9 @@ define(function(require) {
     load: function() {
       $.getJSON(this.path, _.bind(this.onLevelReceived, this))
     },
+    iscollision: function() {
+
+    },
     layerCount: function() {
       return this.data.layers.length
     },
