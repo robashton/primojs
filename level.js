@@ -69,9 +69,12 @@ define(function(require) {
       var layer = this.rawdata.layers[i]
       var tilesets = this.tilesets
       var spritemaps = this.spritemaps
+      var collisionmaps = this.collisionmaps
+      var tilesize = this.tilesize()
       this.require(layer.tileset, function(tileset) {
         tilesets[layer.tileset] = tileset
-        spritemaps[layer.tileset] = new SpriteMap(tileset.path, tileset.tilesize)
+        spritemaps[layer.tileset] = new SpriteMap(tileset)
+        spritemaps[layer.tileset].generateCollisionMaps(tilesize, tilesize)
       })
     },
     loadEntities: function() {
