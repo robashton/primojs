@@ -43,7 +43,7 @@ define(function(require) {
       return Math.floor(world / this.rawdata.tilesize)
     },
     checkQuadMovement: function(x, y, width, height, velx, vely) {
-      var steps = Math.ceil(Math.max(Math.abs(velx), Math.abs(vely)) / this.rawdata.tilesize)
+      var steps = Math.ceil(Math.max(Math.abs(velx), Math.abs(vely)))
       var horizontalx = velx > 0 ? x + width : x
       var verticaly = vely > 0 ? y+height : y
       var stepx = velx / steps
@@ -71,15 +71,16 @@ define(function(require) {
       return res
     },
     solidAt: function(worldx, worldy) {
-      var tilex = parseInt(worldx / this.rawdata.tilesize , 10)
-      var tiley = parseInt(worldy / this.rawdata.tilesize , 10)
-      if(tilex < 0) return false
-      if(tiley < 0) return false
-      if(tilex >= this.width()) return false
-      if(tiley >= this.height()) return false
+      var x = parseInt(worldx, 10)
+      var y = parseInt(worldy, 10)
+      if(x < 0) return false
+      if(y < 0) return false
+      if(x >= this.width() * this.rawdata.tilesize) return false
+      if(y >= this.height() * this.rawdata.tilesize) return false
+
       for(var i = 0 ; i < this.layers.length; i++) {
         var layer = this.layers[i]
-        if(layer.iscollision() && layer.solidAt(tilex, tiley)) return true
+        if(layer.iscollision() && layer.solidAt(x, y)) return true
       }
       return false
     },

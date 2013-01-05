@@ -26,10 +26,15 @@ define(function(require) {
       }
       return !!this.config.collision
     },
-    solidAt: function(tilex, tiley) {
+    solidAt: function(x, y) {
+      var tilex = parseInt( x / this.level.tilesize(), 10)
+      var tiley = parseInt( y / this.level.tilesize(), 10)
+      var remainderx = x % this.level.tilesize()
+      var remaindery = y % this.level.tilesize()
+
       var index = this.config.data[tilex + tiley * this.level.width()]
       if(index === null) return false
-      return this.spritemap().hasPixelAt(index, tilex, tiley)
+      return this.spritemap().hasPixelAt(index, remainderx, remaindery)
     },
     hide: function() {
       this.hidden = true
