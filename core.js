@@ -46,8 +46,11 @@ define(function(require) {
     },
     tick: function() {
       this.raise('tick')
-      for(var i = 0; i < this.entities.length; i++)
-        this.entities[i].tick()
+      for(var i = 0; i < this.entities.length; i++) {
+        var entity = this.entities[i]
+        entity.checkAgainstLevel(this.level)
+        entity.tick()
+      }
       this.render()
     },
     renderLayer: function(layer) {

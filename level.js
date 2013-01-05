@@ -39,10 +39,44 @@ define(function(require) {
     load: function() {
       $.getJSON(this.path, _.bind(this.onLevelReceived, this))
     },
+    worldToTile: function(world) {
+      return Math.floor(world / this.rawdata.tilesize)
+    },
+    checkQuadMovement: function(x, y, width, height, velx, vely) {
+      var steps = Math.ceil(Math.max(Math.abs(velx), Math.abs(vely)) / this.rawdata.tilesize)
+      var horizontalx = velx > 0 ? x : x + width
+      var verticaly = vely > 0 ? y+height : y
+      var stepx = velx / steps
+      var stepy = vely / steps
+      var res = {}
+
+      for(var i = 0 ; i < steps ; i++) {
+        var offsetx = stepx * i
+        var offsety = stepy * i
+
+        // Check horizontal
+        if(this.solidAt(horizontalx + offsetx, y + offsety))
+          res.horizontal = true
+
+        if(this.solidAt(horizontalx + offsetx, y+height+offsety))
+          res.horizontal = true
+
+        // Check vertical
+        if(this.solidAt(x + offsetx, verticaly + offsety))
+          res.vertical = true
+
+        if(this.solidAt(x+width+offsetx, verticaly+offsety))
+          res.vertical = true
+      }
+      return res
+    },
     solidAt: function(worldx, worldy) {
-      // TODO: Look this up from a pre-computed map
       var tilex = parseInt(worldx / this.rawdata.tilesize , 10)
       var tiley = parseInt(worldy / this.rawdata.tilesize , 10)
+      if(tilex < 0) return false
+      if(tiley < 0) return false
+      if(tilex >= this.width()) return false
+      if(tiley >= this.height()) return false
       for(var i = 0 ; i < this.layers.length; i++) {
         var layer = this.layers[i]
         if(layer.iscollision() && layer.solidAt(tilex, tiley)) return true

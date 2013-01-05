@@ -19,9 +19,25 @@ define(function(require) {
     },
     tick: function() {
       _(this.components).each(function(c) { if(c.tick) c.tick() })
+      this.updatePhysics()
     },
     render: function(context) {
       _(this.components).each(function(c) { if(c.render) c.render(context) })
+    },
+    updatePhysics: function() {
+      this.x += this.velx
+      this.y += this.vely
+    },
+    checkAgainstLevel: function(level) {
+      var res = level.checkQuadMovement(
+        this.x, this.y, this.width, this.height, this.velx, this.vely)
+
+      if(res.horizontal) {
+        this.velx = 0
+      } 
+      if(res.vertical) {
+        this.vely = 0
+      }
     }
   }
 
