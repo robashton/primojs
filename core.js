@@ -50,8 +50,9 @@ define(function(require) {
       this.raise('tick')
       for(var i = 0; i < this.entities.length; i++) {
         var entity = this.entities[i]
-        entity.checkAgainstLevel(this.level)
         entity.tick()
+        entity.checkAgainstLevel(this.level)
+        entity.updatePhysics()
       }
       this.render()
     },

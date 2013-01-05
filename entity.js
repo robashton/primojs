@@ -20,7 +20,6 @@ define(function(require) {
     },
     tick: function() {
       _(this.components).each(function(c) { if(c.tick) c.tick() })
-      this.updatePhysics()
     },
     render: function(context) {
       _(this.components).each(function(c) { if(c.render) c.render(context) })
