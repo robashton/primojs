@@ -3,6 +3,7 @@ define(function(require) {
   var _ = require('underscore')
   var Camera = require('./camera')
   var Level = require('./level')
+  var Input = require('./input')
 
   var Runner = function(targetid) {
     Eventable.call(this)
@@ -14,6 +15,7 @@ define(function(require) {
     this.context = this.canvas.getContext('2d')
     this.camera = new Camera(this.context)
     this.camera.makeTopLeftWorldCoords(0,0)
+    this.input = new Input(this.canvas)
   }
 
   Runner.prototype = {
@@ -37,7 +39,7 @@ define(function(require) {
       this.layers = []
     },
     spawnEntity: function(Type, data)  {
-      var entity = new Type('entity-' + this.entities.length, data)
+      var entity = new Type('entity-' + this.entities.length, data, this)
       this.entities.push(entity)
       return entity
     },

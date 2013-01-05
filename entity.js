@@ -2,7 +2,7 @@ define(function(require) {
   var _ = require('underscore')
   var util = require('./commons')
 
-  var Entity = function(id,data) {
+  var Entity = function(id,data, game) {
     this.id = id
     this.x = util.valueOrDefault(data.x, 0)
     this.y = util.valueOrDefault(data.y, 0)
@@ -10,6 +10,7 @@ define(function(require) {
     this.vely = util.valueOrDefault(data.vely, 0)
     this.width = util.valueOrDefault(data.width, 0)
     this.height = util.valueOrDefault(data.height, 0)
+    this.game = game
     this.components = []
   }
 
@@ -42,8 +43,8 @@ define(function(require) {
   }
 
   Entity.Define = function(init) {
-    var Ctor = function(id, data) {
-      Entity.call(this, id, data)
+    var Ctor = function(id, data, game) {
+      Entity.call(this, id, data, game)
       init.call(this, id, data)
     }
     _.extend(Ctor.prototype, Entity.prototype)

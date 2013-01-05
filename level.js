@@ -44,7 +44,7 @@ define(function(require) {
     },
     checkQuadMovement: function(x, y, width, height, velx, vely) {
       var steps = Math.ceil(Math.max(Math.abs(velx), Math.abs(vely)) / this.rawdata.tilesize)
-      var horizontalx = velx > 0 ? x : x + width
+      var horizontalx = velx > 0 ? x + width : x
       var verticaly = vely > 0 ? y+height : y
       var stepx = velx / steps
       var stepy = vely / steps
