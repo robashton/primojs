@@ -3,29 +3,28 @@ define(function(require) {
   var _ = require('underscore')
   var Eventable = require('eventable')
 
-  var SpriteMap = function(data) {
+  var SpriteMap = function(texture, data) {
     Eventable.call(this)
-
     this.filename = data.path
     this.tilesize = data.tilesize
     this.tiles = data.tiles
     this.collisionmapsize = 0
     this.collisionMaps = []
-    this.data = new Image()
-    this.data.src = this.filename
+    this.texture = texture
+    this.texture.waitForLoaded(_.bind(this.onLoaded, this))
     this.loaded = false
-    this.data.onload = _.bind(this.onLoaded, this)
   }
 
   SpriteMap.prototype = {
     drawTo: function(context, index,  x, y, width, height) {
       if(!this.loaded) return
 
+      var img = this.texture.get()
       var delta = this.tilesize * index  
-      var sx = delta % this.data.width
-      var sy = parseInt(delta / this.data.width, 10) * this.tilesize
+      var sx = delta % img.width
+      var sy = parseInt(delta / img.width, 10) * this.tilesize
 
-      context.drawImage(this.data, 
+      context.drawImage(img, 
         sx, sy, this.tilesize, this.tilesize,
         x, y, width || this.tilesize, height || this.tilesize)
     },

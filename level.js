@@ -5,7 +5,7 @@ define(function(require) {
   var Layer = require('./layer')
   var SpriteMap = require('./spritemap')
 
-  var Level = function(path) {
+  var Level = function(engine, path) {
     Eventable.call(this)
     this.path = path
     this.rawdata = null
@@ -14,6 +14,7 @@ define(function(require) {
     this.entityTypes = {}
     this.pendingResults = 0
     this.finished = false
+    this.engine = engine
     this.load()
   }
 
@@ -132,9 +133,13 @@ define(function(require) {
       var spritemaps = this.spritemaps
       var collisionmaps = this.collisionmaps
       var tilesize = this.tilesize()
+      var engine = this.engine
+
       this.require(layer.tileset, function(tileset) {
         tilesets[layer.tileset] = tileset
-        spritemaps[layer.tileset] = new SpriteMap(tileset)
+
+        var texture = engine.resources.image(tileset.path)
+        spritemaps[layer.tileset] = new SpriteMap(texture, tileset)
         spritemaps[layer.tileset].generateCollisionMaps(tilesize, tilesize)
       })
     },

@@ -4,6 +4,7 @@ define(function(require) {
   var Camera = require('./camera')
   var Level = require('./level')
   var Input = require('./input')
+  var Resources = require('./resources')
 
   var Runner = function(targetid) {
     Eventable.call(this)
@@ -16,6 +17,7 @@ define(function(require) {
     this.camera = new Camera(this.context)
     this.camera.makeTopLeftWorldCoords(0,0)
     this.input = new Input(this.canvas)
+    this.resources = new Resources()
   }
 
   Runner.prototype = {
@@ -24,7 +26,7 @@ define(function(require) {
       setInterval(_.bind(this.tick, this), 1000/30)
     },
     loadLevel: function(path) {
-      this.level = new Level(path)
+      this.level = new Level(this, path)
       this.level.on('loaded', this.onLevelLoaded, this)
     },
     setLevel: function(level) {
