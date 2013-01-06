@@ -3,11 +3,13 @@ define(function(require) {
   var _ = require('underscore')
   var Eventable = require('eventable')
 
-  var SpriteMap = function(texture, data) {
+  var SpriteMap = function(texture, spritewidth, spriteheight) {
     Eventable.call(this)
-    this.filename = data.path
-    this.tilesize = data.tilesize
-    this.tiles = data.tiles
+    this.spritewidth = spritewidth
+    this.spriteheight = spriteheight
+    this.tilecount = 0
+    this.tilecountwidth = 0
+    this.tilecountheight = 0
     this.collisionmapsize = 0
     this.collisionMaps = []
     this.texture = texture
@@ -20,13 +22,16 @@ define(function(require) {
       if(!this.loaded) return
 
       var img = this.texture.get()
-      var delta = this.tilesize * index  
-      var sx = delta % img.width
-      var sy = parseInt(delta / img.width, 10) * this.tilesize
+
+      var rownumber = Math.floor(index / this.tilecountwidth)
+      var columnnumber = index % this.tilecountwidth
+
+      var sx = columnnumber * this.spritewidth
+      var sy = rownumber * this.spriteheight
 
       context.drawImage(img, 
-        sx, sy, this.tilesize, this.tilesize,
-        x, y, width || this.tilesize, height || this.tilesize)
+        sx, sy, this.spritewidth, this.spriteheight,
+        x, y, width || this.spritewidth, height || this.spriteheight)
     },
     generateCollisionMaps: function(width, height) {
       if(!this.loaded) 
@@ -36,11 +41,11 @@ define(function(require) {
 
       this.collisionmapsize = width
       var canvas = new MemoryCanvas(width, height)
-      for(var name in this.tiles) {
-        var index = this.tiles[name]
+
+      for(var i = 0; i < this.tilecount ; i++) {
         canvas.reset()
-        this.drawTo(canvas.context, index, 0, 0, width, height)
-        this.collisionMaps[index] = canvas.createMap()
+        this.drawTo(canvas.context, i, 0, 0, width, height)
+        this.collisionMaps[i] = canvas.createMap()
       }
     },
     hasPixelAt: function(index, x, y) {
@@ -50,6 +55,10 @@ define(function(require) {
     },
     onLoaded: function() {
       this.loaded = true
+      var img = this.texture.get()
+      this.tilecountwidth = img.width / this.spritewidth
+      this.tilecountheight = img.height / this.spriteheight
+      this.tilecount = this.tilecountwidth * this.tilecountheight
       this.raise('loaded')
     }
   }

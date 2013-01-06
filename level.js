@@ -137,9 +137,8 @@ define(function(require) {
 
       this.require(layer.tileset, function(tileset) {
         tilesets[layer.tileset] = tileset
-
-        var texture = engine.resources.image(tileset.path)
-        spritemaps[layer.tileset] = new SpriteMap(texture, tileset)
+        spritemaps[layer.tileset] = 
+          engine.resources.spritemap(tileset.path, tileset.tilesize, tileset.tilesize)
         spritemaps[layer.tileset].generateCollisionMaps(tilesize, tilesize)
       })
     },

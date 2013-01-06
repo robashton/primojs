@@ -1,5 +1,7 @@
 define(function(require) {
+  var SpriteMap = require('./spritemap')
   var TextureResource = require('./textureresource')
+
 
   var Resources = function() {
     this.cache = {}
@@ -7,6 +9,10 @@ define(function(require) {
   }
 
   Resources.prototype = {
+    spritemap: function(path, spritewidth, spriteheight) {
+      var image = this.image(path)
+      return new SpriteMap(image, spritewidth, spriteheight)
+    },
     image: function(path) {
       var resource = this.cache[path]
       if(!resource) {
