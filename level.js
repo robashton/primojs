@@ -42,31 +42,50 @@ define(function(require) {
     worldToTile: function(world) {
       return Math.floor(world / this.rawdata.tilesize)
     },
-    checkQuadMovement: function(x, y, width, height, velx, vely) {
+    checkQuadMovement: function(x, y, width, height, velx, vely, res) {
       var steps = Math.ceil(Math.max(Math.abs(velx), Math.abs(vely)))
-      var horizontalx = velx > 0 ? x + width : x
-      var verticaly = vely > 0 ? y+height : y
       var stepx = velx / steps
       var stepy = vely / steps
-      var res = {}
+      res = res || {}
+
+      var topleft = false, 
+          topright = false, 
+          bottomleft = false, 
+          bottomright = false 
 
       for(var i = 0 ; i < steps ; i++) {
         var offsetx = stepx * i
         var offsety = stepy * i
 
-        // Check horizontal
-        if(this.solidAt(horizontalx + offsetx, y + offsety))
-          res.horizontal = true
+        if(this.solidAt(x + offsetx, y + offsety))
+          topleft = true
 
-        if(this.solidAt(horizontalx + offsetx, y+height+offsety))
-          res.horizontal = true
+        if(this.solidAt(x + offsetx + width, y + offsety))
+          topright = true
 
-        // Check vertical
-        if(this.solidAt(x + offsetx, verticaly + offsety))
-          res.vertical = true
+        if(this.solidAt(x + offsetx, y + offsety + height))
+          bottomleft = true
 
-        if(this.solidAt(x+width+offsetx, verticaly+offsety))
-          res.vertical = true
+        if(this.solidAt(x + offsetx + width, y + offsety + height))
+          bottomright = true
+
+        if(topleft || topright || bottomleft || bottomright) {
+          res.x = x + offsetx - stepx
+          res.y = y + offsety - stepy
+
+          if(bottomleft && bottomright)
+            res.horizontal = true
+          if(topleft && topright)
+            res.horizontal = true
+          if(topright && bottomright)
+            res.vertical = true
+          if(topleft && bottomleft)
+            res.vertical = true
+
+          res.collision = true
+
+          break
+        }
       }
       return res
     },

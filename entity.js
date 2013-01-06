@@ -32,10 +32,24 @@ define(function(require) {
       var res = level.checkQuadMovement(
         this.x, this.y, this.width, this.height, this.velx, this.vely)
 
-      if(res.horizontal) {
+      if(res.horizontal && res.vertical) {
+        this.x = res.x
+        this.y = res.y
         this.velx = 0
+        this.vely = 0
+      }
+      else if(res.horizontal) {
+        this.vely = 0
+        this.y = res.y
       } 
-      if(res.vertical) {
+      else if(res.vertical) {
+        this.velx = 0
+        this.x = res.x
+      }
+      else if(res.collision) {
+        this.x = res.x
+        this.y = res.y
+        this.velx = 0
         this.vely = 0
       }
     }
