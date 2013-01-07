@@ -79,6 +79,10 @@ define(function(require) {
       this.lookat[1] = x + (this.viewport.height/2.0)
       this.updateViewport()
     },
+    setViewport: function(x, y, width, height) {
+      
+
+    },
     scalex: function() {
       return this.viewport.scale[0]
     },
