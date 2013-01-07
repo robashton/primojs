@@ -28,6 +28,9 @@ define(function(require) {
       this.x += this.velx
       this.y += this.vely
     },
+    notifyOfCollisionWith: function(other) {
+
+    },
     checkAgainstLevel: function(level) {
       var res = level.checkQuadMovement(
         this.x, this.y, this.width, this.height, this.velx, this.vely)

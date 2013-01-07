@@ -5,6 +5,7 @@ define(function(require) {
   var Level = require('./level')
   var Input = require('./input')
   var Resources = require('./resources')
+  var CollisionGrid = require('./collisiongrid')
 
   var Runner = function(targetid) {
     Eventable.call(this)
@@ -50,16 +51,17 @@ define(function(require) {
     },
     tick: function() {
       this.raise('tick')
+      var grid = new CollisionGrid(32)
       for(var i = 0; i < this.entities.length; i++) {
         var entity = this.entities[i]
         entity.tick()
-        entity.checkAgainstLevel(this.level)
+        if(this.level)
+          entity.checkAgainstLevel(this.level)
         entity.updatePhysics()
+        grid.addEntity(entity)
       }
+      grid.performCollisionChecks()
       this.render()
-    },
-    renderLayer: function(layer) {
-      layer.render(this.context)
     },
     entityAt: function(worldx, worldy) {
       // TODO: Spacial hash for even this
@@ -77,7 +79,8 @@ define(function(require) {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
       this.camera.begin()
       try {
-        this.level.forEachLayer(_.bind(this.renderLayer, this))
+        if(this.level)
+          this.level.forEachLayer(_.bind(this.renderLayer, this))
         for(var i = 0; i < this.entities.length ; i++) {
           this.entities[i].render(this.context)
         }
@@ -88,7 +91,10 @@ define(function(require) {
       finally {
         this.camera.end()
       }
-    }
+    },
+    renderLayer: function(layer) {
+      layer.render(this.context)
+    },
   }
   _.extend(Runner.prototype, Eventable.prototype)
 

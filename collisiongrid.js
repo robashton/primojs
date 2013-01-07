@@ -51,15 +51,11 @@ define(function(require) {
     }
   }
 
-  var CollisionGrid = function(width, height, cellsize) {
-    this.width = width
-    this.height = height
+  var CollisionGrid = function(cellsize) {
     this.cellsize = cellsize
     this.entities = []
     this.entityBuckets = {}
-    this.buckets = new Array(this.width * this.height)
-    for(var i =0 ; i < width*height; i++)
-      this.buckets[i] = new Bucket(i)
+    this.buckets = []
   }
 
   CollisionGrid.prototype = {
@@ -82,7 +78,13 @@ define(function(require) {
     bucketFor: function(x,y) {
       x = Math.floor(x / this.cellsize)
       y = Math.floor(y / this.cellsize)
-      return this.buckets[x + y*this.width]
+      var id = x + y * this.width
+      var bucket = this.buckets[id] 
+      if(!bucket) {
+        bucket = new Bucket(id)
+        this.buckets[id] = bucket
+      }
+      return bucket
     },
     performCollisionChecks: function() {
       var entitiesToCheck = []
@@ -90,7 +92,6 @@ define(function(require) {
         entitiesToCheck.length = 0
         var registered = this.entities[i]
         registered.fillArrayWithNearbyEntities(entitiesToCheck)
-        console.log('Comparing', registered.id, 'against', entitiesToCheck.length)
         for(var j = 0; j < entitiesToCheck.length; j++) {
           var other = entitiesToCheck[j]
           registered.collideWith(other)
