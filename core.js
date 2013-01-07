@@ -6,6 +6,7 @@ define(function(require) {
   var Input = require('./input')
   var Resources = require('./resources')
   var CollisionGrid = require('./collisiongrid')
+  var Timer = require('./timer')
 
   var Runner = function(targetid) {
     Eventable.call(this)
@@ -19,12 +20,14 @@ define(function(require) {
     this.camera.makeTopLeftWorldCoords(0,0)
     this.input = new Input(this.canvas)
     this.resources = new Resources()
+    this.tickTimer = new Timer(30)
+    this.tick = _.bind(this.tick, this)
   }
 
   Runner.prototype = {
     start: function() {
       this.raise('init')
-      setInterval(_.bind(this.tick, this), 1000/30)
+      setInterval(_.bind(this.doTick, this), 1000/30)
     },
     loadLevel: function(path) {
       this.level = new Level(this, path)
@@ -49,6 +52,10 @@ define(function(require) {
     addLayer: function(layer) {
       this.layers.push(layer)
     },
+    doTick: function() {
+      this.tickTimer.tick(this.tick)
+      this.render()
+    },
     tick: function() {
       this.raise('tick')
       var grid = new CollisionGrid(32)
@@ -61,7 +68,6 @@ define(function(require) {
         grid.addEntity(entity)
       }
       grid.performCollisionChecks()
-      this.render()
     },
     entityAt: function(worldx, worldy) {
       // TODO: Spacial hash for even this
