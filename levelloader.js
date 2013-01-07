@@ -1,7 +1,6 @@
 define(function(require) {
   var Eventable = require('eventable')
   var _ = require('underscore')
-  var $ = require('jquery')
 
   var LevelLoader = function(path) {
     Eventable.call(this)
