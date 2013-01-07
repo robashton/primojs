@@ -80,8 +80,9 @@ define(function(require) {
       this.updateViewport()
     },
     setViewport: function(x, y, width, height) {
-      
-
+      this.distance = width / Math.tan(this.fieldOfView)
+      this.aspectRatio = width / height
+      this.makeTopLeftWorldCoords(x, y)
     },
     scalex: function() {
       return this.viewport.scale[0]
