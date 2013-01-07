@@ -43,11 +43,12 @@ define(function(require) {
       }
     },
     collideWith: function(other) {
-      if(other.x > this.entity.x + this.entity.width) return
-      if(other.y > this.entity.y + this.entity.height) return
-      if(other.x + other.width < this.entity.x) return
-      if(other.y + other.height < this.entity.y) return
-      this.entity.notifyOfCollisionWith(other)
+      if(other.entity.x > this.entity.x + this.entity.width) return
+      if(other.entity.y > this.entity.y + this.entity.height) return
+      if(other.entity.x + other.entity.width < this.entity.x) return
+      if(other.entity.y + other.entity.height < this.entity.y) return
+
+      this.entity.notifyOfCollisionWith(other.entity)
     }
   }
 
@@ -78,7 +79,7 @@ define(function(require) {
     bucketFor: function(x,y) {
       x = Math.floor(x / this.cellsize)
       y = Math.floor(y / this.cellsize)
-      var id = x + y * this.width
+      var id = x + '-' + y
       var bucket = this.buckets[id] 
       if(!bucket) {
         bucket = new Bucket(id)
@@ -87,11 +88,13 @@ define(function(require) {
       return bucket
     },
     performCollisionChecks: function() {
+      var total = 0
       var entitiesToCheck = []
       for(var i = 0; i < this.entities.length; i++) {
         entitiesToCheck.length = 0
         var registered = this.entities[i]
         registered.fillArrayWithNearbyEntities(entitiesToCheck)
+        total += entitiesToCheck.length
         for(var j = 0; j < entitiesToCheck.length; j++) {
           var other = entitiesToCheck[j]
           registered.collideWith(other)
