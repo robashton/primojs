@@ -37,6 +37,7 @@ define(function(require) {
         options: options,
         current: 0
       }
+      return this
     },
     setAnimation: function(animation) {
       if(this.currentanimation === animation) return
