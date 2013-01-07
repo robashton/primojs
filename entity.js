@@ -12,17 +12,30 @@ define(function(require) {
     this.height = util.valueOrDefault(data.height, 0)
     this.game = game
     this.components = []
+    this.commandHandlers = {}
+    this.dispatch = _.bind(this.dispatch, this)
   }
 
   Entity.prototype = {
     attach: function(component) {
       this.components.push(component)
+      return component
     },
     tick: function() {
       _(this.components).each(function(c) { if(c.tick) c.tick() })
     },
     render: function(context) {
       _(this.components).each(function(c) { if(c.render) c.render(context) })
+    },
+    handle: function(command, cb) {
+      this.commandHandlers[command] = cb
+    },
+    dispatch: function(command, data) {
+      var handler = this.commandHandlers[command]
+      if(!handler)
+        console.warn('No handler registered for command', command)
+      else
+        handler(data)
     },
     updatePhysics: function() {
       this.x += this.velx
