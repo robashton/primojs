@@ -13,9 +13,13 @@ define(function(require) {
       other.dispatch('collidewith', this)
     },
     collideWith: function(other) {
-      // At this point, we have two entities with rigid bodies
-      // and can therefore do some magic
+      var entityOne = this.entity
+        , entityTwo = other.entity
 
+      entityOne.velx = 0
+      entityOne.vely = 0
+      entityTwo.velx = 0
+      entityTwo.vely = 0
     }
   }
 
