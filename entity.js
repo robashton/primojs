@@ -12,6 +12,7 @@ define(function(require) {
     this.vely = util.valueOrDefault(data.vely, 0)
     this.width = util.valueOrDefault(data.width, 0)
     this.height = util.valueOrDefault(data.height, 0)
+    this.collideable = false
     this.game = game
     this.components = []
     this.commandHandlers = {}
