@@ -23,6 +23,23 @@ define(function(require) {
       if(this.group === other.group && this.group !== 'none')
         return
 
+      var entityOnePercentage = 0
+      var entityTwoPerentage = 0
+      if(this.weight > other.weight) {
+        entityOnePercentage = this.weight / other.weight
+        entityTwoPerentage = 1.0 - entityOnePercentage
+      }
+      else if(this.weight < other.weight) {
+        entityTwoPerentage = other.weight / this.weight
+        entityOnePercentage = 1.0 - entityTwoPerentage
+      }
+      else {
+        entityOnePercentage = 0.5
+        entityTwoPerentage = 0.5
+      }
+
+      
+
       entityOne.velx = 0
       entityOne.vely = 0
       entityTwo.velx = 0
