@@ -62,10 +62,12 @@ define(function(require) {
       for(var i = 0; i < this.entities.length; i++) {
         var entity = this.entities[i]
         entity.tick()
-        if(this.level)
-          entity.checkAgainstLevel(this.level)
+        if(entity.collideable) {
+          if(this.level)
+            entity.checkAgainstLevel(this.level)
+          grid.addEntity(entity)
+        }
         entity.updatePhysics()
-        grid.addEntity(entity)
       }
       grid.performCollisionChecks()
     },
