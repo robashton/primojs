@@ -9,6 +9,7 @@ define(function(require) {
     this.entity.handle('collidewith', _.bind(this.collideWith, this))
     this.entity.collideable = true
     this.group = util.valueOrDefault(options.group, 'none')
+    this.weight = util.valueOrDefault(options.weight, 10)
   }
 
   RigidBody.prototype = {
