@@ -1,8 +1,10 @@
 define(function(require) {
   var _ = require('underscore')
   var util = require('./commons')
+  var Eventable = require('eventable')
 
   var Entity = function(id,data, game) {
+    Eventable.call(this)
     this.id = id
     this.x = util.valueOrDefault(data.x, 0)
     this.y = util.valueOrDefault(data.y, 0)
@@ -42,7 +44,7 @@ define(function(require) {
       this.y += this.vely
     },
     notifyOfCollisionWith: function(other) {
-
+      this.raise('collided', other)
     },
     checkAgainstLevel: function(level) {
       var res = level.checkQuadMovement(
@@ -79,5 +81,6 @@ define(function(require) {
     _.extend(Ctor.prototype, Entity.prototype)
     return Ctor
   }
+  _.extend(Entity.prototype, Eventable.prototype)
   return Entity
 })
