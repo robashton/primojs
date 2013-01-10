@@ -16,6 +16,7 @@ define(function(require) {
       return this.image
     },
     onLoaded: function() {
+      this.loaded = true
       this.raise('loaded')
     },
     waitForLoaded: function(cb) {

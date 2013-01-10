@@ -47,27 +47,10 @@ define(function(require) {
       entityTwo.x -= intersection.x * (entityTwoPercentage * 1.05)
       entityTwo.y -= intersection.y * (entityTwoPercentage * 1.05)
 
-      /*
-      // var p1 = (vX, vY)
-      // var p2 = (vX, vY)
-      // var i = 
-
-      var angleOne = entityOne.angleOfTravel()
-        , angleTwo = entityTwo.angleOfTravel()
-        , speedOne = k
-
-
-
-      // Can we work out the angle of the collision and 
-      // therefore the separation we need to take place?
-      var clip = this.calculateClip(entityOne, entityTwo)
-
-      */
-
-      entityOne.velx = 0
-      entityOne.vely = 0
-      entityTwo.velx = 0
-      entityTwo.vely = 0
+      entityOne.velx *= entityTwoPercentage
+      entityOne.vely *= entityTwoPercentage
+      entityTwo.velx *= entityOnePercentage
+      entityTwo.vely *= entityOnePercentage
     },
     calculateIntersectionBetween: function(one, two) {
       var x = 0, y = 0
@@ -91,51 +74,6 @@ define(function(require) {
       this.currentIntersection.x = x
       this.currentIntersection.y = y
       return this.currentIntersection
-    },
-    calculateClip: function(one, two) {
-      var intersectResult = {}
-
-      // Clip right
-      if(one.x + one.width > two.x && 
-         one.x + one.width < two.x + two.width &&
-         one.y + (one.height / 2.0) > two.y &&
-         one.y + (one.height / 2.0) < two.y + two.height) {
-          
-        intersectResult.x = two.x - (one.x + one.width); 
-        return intersectResult;     
-      }
-     
-      // Clip left
-      if(one.x > two.x && 
-         one.x < two.x + two.width &&
-         one.y + (one.height / 2.0) > two.y &&
-         one.y + (one.height / 2.0) < two.y + two.height) {
-          
-        intersectResult.x = (two.x + two.width) - one.x
-        return intersectResult;     
-      }
-
-      // Clip bottom
-      if(one.x + (one.width / 2.0) > two.x && 
-         one.x + (one.width / 2.0) < two.x + two.width &&
-         one.y + one.height > two.y &&
-         one.y + one.height < two.y + two.height) {
-
-        intersectResult.y =  two.y - (one.y + one.height);
-        return intersectResult;     
-      }
-
-      // Clip top
-      if(one.x + (one.width / 2.0) > two.x && 
-         one.x + (one.width / 2.0) < two.x + two.width &&
-         one.y + one.height > two.y &&
-         one.y + one.height < two.y + two.height) {
-
-        intersectResult.y =  two.y - (one.y + one.height);
-        return intersectResult;     
-      }
-
-
     }
   }
 
