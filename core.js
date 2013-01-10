@@ -63,12 +63,15 @@ define(function(require) {
         var entity = this.entities[i]
         entity.tick()
         if(entity.collideable) {
+
+          // This is pro-active
           if(this.level)
             entity.checkAgainstLevel(this.level)
           grid.addEntity(entity)
         }
         entity.updatePhysics()
       }
+      // This is re-active
       grid.performCollisionChecks()
     },
     entityAt: function(worldx, worldy) {
