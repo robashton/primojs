@@ -26,12 +26,13 @@ define(function(require) {
 
       var entityOnePercentage = 0
       var entityTwoPercentage = 0
+
       if(this.weight > other.weight) {
-        entityOnePercentage = this.weight / other.weight
+        entityOnePercentage = other.weight / (other.weight + this.weight)
         entityTwoPercentage = 1.0 - entityOnePercentage
       }
       else if(this.weight < other.weight) {
-        entityTwoPercentage = other.weight / this.weight
+        entityTwoPercentage = this.weight / (other.weight + this.weight)
         entityOnePercentage = 1.0 - entityTwoPercentage
       }
       else {
@@ -41,10 +42,10 @@ define(function(require) {
 
       var intersection = this.calculateIntersectionBetween(entityOne, entityTwo)
 
-      entityOne.x += intersection.x * entityOnePercentage
-      entityOne.y += intersection.y * entityOnePercentage
-      entityTwo.x -= intersection.x * entityTwoPercentage
-      entityTwo.y -= intersection.y * entityTwoPercentage
+      entityOne.x += intersection.x * (entityOnePercentage * 1.05)
+      entityOne.y += intersection.y * (entityOnePercentage * 1.05)
+      entityTwo.x -= intersection.x * (entityTwoPercentage * 1.05)
+      entityTwo.y -= intersection.y * (entityTwoPercentage * 1.05)
 
       /*
       // var p1 = (vX, vY)
