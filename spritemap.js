@@ -13,8 +13,8 @@ define(function(require) {
     this.collisionmapsize = 0
     this.collisionMaps = []
     this.texture = texture
-    this.texture.waitForLoaded(_.bind(this.onLoaded, this))
     this.loaded = false
+    this.texture.waitForLoaded(_.bind(this.onLoaded, this))
   }
 
   SpriteMap.prototype = {
