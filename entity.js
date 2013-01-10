@@ -75,6 +75,10 @@ define(function(require) {
         this.velx = 0
         this.vely = 0
       }
+    },
+    kill: function() {
+      this.game.removeEntity(this)
+      // TODO: Remove all handlers etc?
     }
   }
 

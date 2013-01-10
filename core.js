@@ -49,6 +49,9 @@ define(function(require) {
       this.entities.push(entity)
       return entity
     },
+    removeEntity: function(entity) {
+      this.entities = _.without(this.entities, entity)
+    },
     addLayer: function(layer) {
       this.layers.push(layer)
     },
