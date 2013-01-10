@@ -4,7 +4,6 @@ define(function(require) {
 
   var Input = function(ele) {
     Eventable.call(this)
-
     document.addEventListener('keydown', _.bind(this.onKeyDown, this))
     document.addEventListener('keyup', _.bind(this.onKeyUp, this))
     this.aliases = {}
