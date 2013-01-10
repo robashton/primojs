@@ -8,6 +8,8 @@ define(function(require) {
     this.id = id
     this.x = util.valueOrDefault(data.x, 0)
     this.y = util.valueOrDefault(data.y, 0)
+    this.lastx = this.x
+    this.lasty = this.y
     this.velx = util.valueOrDefault(data.velx, 0)
     this.vely = util.valueOrDefault(data.vely, 0)
     this.width = util.valueOrDefault(data.width, 0)
@@ -41,6 +43,8 @@ define(function(require) {
         handler(data)
     },
     updatePhysics: function() {
+      this.lastx = this.x
+      this.lasty = this.y
       this.x += this.velx
       this.y += this.vely
     },
