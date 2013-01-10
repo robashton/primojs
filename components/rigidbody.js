@@ -10,6 +10,7 @@ define(function(require) {
     this.entity.collideable = true
     this.group = util.valueOrDefault(options.group, 'none')
     this.weight = util.valueOrDefault(options.weight, 10)
+    this.currentIntersection = {}
   }
 
   RigidBody.prototype = {
@@ -24,36 +25,26 @@ define(function(require) {
         return
 
       var entityOnePercentage = 0
-      var entityTwoPerentage = 0
+      var entityTwoPercentage = 0
       if(this.weight > other.weight) {
         entityOnePercentage = this.weight / other.weight
-        entityTwoPerentage = 1.0 - entityOnePercentage
+        entityTwoPercentage = 1.0 - entityOnePercentage
       }
       else if(this.weight < other.weight) {
-        entityTwoPerentage = other.weight / this.weight
-        entityOnePercentage = 1.0 - entityTwoPerentage
+        entityTwoPercentage = other.weight / this.weight
+        entityOnePercentage = 1.0 - entityTwoPercentage
       }
       else {
         entityOnePercentage = 0.5
-        entityTwoPerentage = 0.5
+        entityTwoPercentage = 0.5
       }
 
-      // Perform ray intersection test
-      // with circles? (does this work?)
-      // this will give us the angle and position of intersection
-      // and from this we'll be able to work out 
-      // the angle of bounce, how far to undo the move
-      // Perhaps we could do ray intersection between the four corners of one
-      // and the sphere of the other, this would be pretty arbitrary of course
-      // Perhaps we need to do both for both, then both have their own bouncing 
-      // ray, and percentages can be done accordingly
-      // can we re-use this code for 'if they're not colliding next frame, did they collide?'
-      // Fairly sure we can, that would be neat - entities can't avoid collision
-      var intersectionOne = this.calculateIntersectionBetween(entityOne, entityTwo)
-      var intersectionTwo = this.calculateIntersectionBetween(entityOne, entityTwo)
+      var intersection = this.calculateIntersectionBetween(entityOne, entityTwo)
 
-      this.resolveIntersectionFor(entityOne, intersectionOne, entityOnePercentage)
-      this.resolveIntersectionFor(entityTwo, intersectionTwo, entityTwoPerentage)
+      entityOne.x += intersection.x * entityOnePercentage
+      entityOne.y += intersection.y * entityOnePercentage
+      entityTwo.x -= intersection.x * entityTwoPercentage
+      entityTwo.y -= intersection.y * entityTwoPercentage
 
       /*
       // var p1 = (vX, vY)
@@ -70,12 +61,35 @@ define(function(require) {
       // therefore the separation we need to take place?
       var clip = this.calculateClip(entityOne, entityTwo)
 
+      */
 
       entityOne.velx = 0
       entityOne.vely = 0
       entityTwo.velx = 0
       entityTwo.vely = 0
-      */
+    },
+    calculateIntersectionBetween: function(one, two) {
+      var x = 0, y = 0
+
+      // Did the right of 'one' brush into the left of 'two'?
+      if(one.lastx + one.width < two.lastx)
+        x = two.x - (one.x + one.width) 
+
+      // Did the left of 'one' brush into the right of 'two'?
+      else if(one.lastx > two.lastx + two.width)
+        x = (two.x + two.width) - one.x
+
+      // Did the bottom of 'one' brush into the 'top' of 'two'?
+      if(one.lasty + one.height < two.lasty)
+        y = two.y - (one.y + one.height) 
+
+      // Did the top of 'one' brush into the 'bottom' of 'two'?
+      else if(one.lasty > two.lasty + two.height)
+        y = (two.y + two.height) - one.y
+
+      this.currentIntersection.x = x
+      this.currentIntersection.y = y
+      return this.currentIntersection
     },
     calculateClip: function(one, two) {
       var intersectResult = {}
