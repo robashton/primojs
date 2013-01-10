@@ -47,10 +47,15 @@ define(function(require) {
     spawnEntity: function(Type, data)  {
       var entity = new Type('entity-' + this.entities.length, data, this)
       this.entities.push(entity)
+      entity.addProxy(this)
       return entity
     },
     removeEntity: function(entity) {
+      entity.removeProxy(this)
       this.entities = _.without(this.entities, entity)
+    },
+    onEntityEvent: function(ev, data) {
+      this.raise(ev, data)
     },
     addLayer: function(layer) {
       this.layers.push(layer)
