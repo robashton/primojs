@@ -29,13 +29,14 @@ define(function(require) {
       if(!anim) return
       var entity = this.entity
       this.spritemap.drawTo(context, anim.steps[this.current], 
-        entity.x, entity.y, entity.width, entity.height)
+        entity.x, entity.y, entity.width, entity.height, 
+        anim.options.flipx, anim.options.flipy)
     },
     define: function(name, timePerFrame, steps, options) {
       this.animations[name] = {
         timePerFrame: timePerFrame,
         steps: steps,
-        options: options,
+        options: options || {},
         current: 0
       }
       return this

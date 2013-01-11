@@ -38,6 +38,9 @@ define(function(require) {
         }
       }
       return map
+    },
+    dispose: function() {
+      document.removeElement(this.canvas)
     }
   }
   return MemoryCanvas

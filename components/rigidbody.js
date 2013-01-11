@@ -71,6 +71,13 @@ define(function(require) {
       else if(one.lasty > two.lasty + two.height)
         y = (two.y + two.height) - one.y
 
+      // Woah, noes, mostly likely a spawn failure
+      if(x === 0 && y === 0) {
+        x = two.x - (one.x + one.width) 
+        y = two.y - (one.y + one.height) 
+      }
+
+
       this.currentIntersection.x = x
       this.currentIntersection.y = y
       return this.currentIntersection

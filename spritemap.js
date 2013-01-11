@@ -18,7 +18,7 @@ define(function(require) {
   }
 
   SpriteMap.prototype = {
-    drawTo: function(context, index,  x, y, width, height) {
+    drawTo: function(context, index,  x, y, width, height, flipx, flipy) {
       if(!this.loaded) return
 
       var img = this.texture.get()
@@ -29,9 +29,26 @@ define(function(require) {
       var sx = columnnumber * this.spritewidth
       var sy = rownumber * this.spriteheight
 
+      var scalex = flipx ? -1 : 1
+      var scaley = flipy ? -1 : 1
+
+      if(flipx || flipy) {
+        context.save()
+        context.scale(scalex, scaley)
+        x *= scalex
+        y *= scaley
+        if(flipx)
+          x -= width
+        if(flipy)
+          y -= height
+      }
+
       context.drawImage(img, 
         sx, sy, this.spritewidth, this.spriteheight,
-        x, y, width || this.spritewidth, height || this.spriteheight)
+        x, y , width || this.spritewidth, height || this.spriteheight)
+
+      if(flipx || flipy) 
+        context.restore()
     },
     generateCollisionMaps: function(width, height) {
       if(!this.loaded) 
@@ -42,10 +59,18 @@ define(function(require) {
       this.collisionmapsize = width
       var canvas = new MemoryCanvas(width, height)
 
-      for(var i = 0; i < this.tilecount ; i++) {
-        canvas.reset()
-        this.drawTo(canvas.context, i, 0, 0, width, height)
-        this.collisionMaps[i] = canvas.createMap()
+      try {
+        for(var i = 0; i < this.tilecount ; i++) {
+          canvas.reset()
+          this.drawTo(canvas.context, i, 0, 0, width, height)
+          this.collisionMaps[i] = canvas.createMap()
+        }
+      }
+      catch(ex) {
+        throw ex
+      }
+      finally {
+        canvas.dispose()
       }
     },
     hasPixelAt: function(index, x, y) {
