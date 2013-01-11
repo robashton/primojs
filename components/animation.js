@@ -8,19 +8,20 @@ define(function(require) {
     this.spritemap = entity.game.resources.spritemap(path, spritewidth, spriteheight)
     this.currentanimation = 'idle'
     this.current = 0
-    this.ticks = 0
+    this.totalFrameTime = 0
     this.animations = {}
     this.entity.handle('set-animation', _.bind(this.setAnimation, this))
   }
 
   Animation.prototype = {
-    tick: function() {
+    tick: function(frameTime) {
       var anim = this.animations[this.currentanimation]
       if(!anim) return
-      if(++this.ticks % anim.fps === 0) {
+      this.totalFrameTime += frameTime
+      if(this.totalFrameTime >= anim.timePerFrame) {
         if(++this.current === anim.steps.length)
           this.current = 0
-        this.ticks = 0
+        this.totalFrameTime = 0
       }
     },
     render: function(context) {
@@ -30,9 +31,9 @@ define(function(require) {
       this.spritemap.drawTo(context, anim.steps[this.current], 
         entity.x, entity.y, entity.width, entity.height)
     },
-    define: function(name, fps, steps, options) {
+    define: function(name, timePerFrame, steps, options) {
       this.animations[name] = {
-        fps: fps,
+        timePerFrame: timePerFrame,
         steps: steps,
         options: options,
         current: 0

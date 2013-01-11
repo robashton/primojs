@@ -20,14 +20,16 @@ define(function(require) {
     this.camera.makeTopLeftWorldCoords(0,0)
     this.input = new Input(this.canvas)
     this.resources = new Resources()
-    this.tickTimer = new Timer(30)
+    this.desiredFps = 30
+    this.frameTime = 1 / this.desiredFps
+    this.tickTimer = new Timer(this.desiredFps)
     this.tick = _.bind(this.tick, this)
   }
 
   Runner.prototype = {
     start: function() {
       this.raise('init')
-      setInterval(_.bind(this.doTick, this), 1000/30)
+      setInterval(_.bind(this.doTick, this), this.frameTime * 1000)
     },
     loadLevel: function(path) {
       this.level = new Level(this, path)
@@ -69,18 +71,18 @@ define(function(require) {
       var grid = new CollisionGrid(32)
       for(var i = 0; i < this.entities.length; i++) {
         var entity = this.entities[i]
-        entity.tick()
+        entity.tick(this.frameTime)
         if(entity.collideable) {
 
           // This is pro-active
           if(this.level)
-            entity.checkAgainstLevel(this.level)
+            entity.checkAgainstLevel(this.level, this.frameTime)
           grid.addEntity(entity)
         }
-        entity.updatePhysics()
+        entity.updatePhysics(this.frameTime)
       }
       // This is re-active
-      grid.performCollisionChecks()
+      grid.performCollisionChecks(this.frameTime)
     },
     entityAt: function(worldx, worldy) {
       // TODO: Spacial hash for even this

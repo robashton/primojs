@@ -26,8 +26,8 @@ define(function(require) {
       this.components.push(component)
       return component
     },
-    tick: function() {
-      _(this.components).each(function(c) { if(c.tick) c.tick() })
+    tick: function(frameTime) {
+      _(this.components).each(function(c) { if(c.tick) c.tick(frameTime) })
     },
     render: function(context) {
       _(this.components).each(function(c) { if(c.render) c.render(context) })
@@ -42,18 +42,19 @@ define(function(require) {
       else
         handler(data)
     },
-    updatePhysics: function() {
+    updatePhysics: function(frameTime) {
       this.lastx = this.x
       this.lasty = this.y
-      this.x += this.velx
-      this.y += this.vely
+      this.x += this.velx * frameTime
+      this.y += this.vely * frameTime
     },
     notifyOfCollisionWith: function(other) {
       this.raise('collided', other)
     },
     checkAgainstLevel: function(level) {
       var res = level.checkQuadMovement(
-        this.x, this.y, this.width, this.height, this.velx, this.vely)
+        this.x, this.y, this.width, this.height, 
+        this.velx * this.frameTime, this.vely * this.frameTime)
 
       if(res.horizontal && res.vertical) {
         this.x = res.x
@@ -77,6 +78,7 @@ define(function(require) {
       }
     },
     kill: function() {
+      this.raise('killed')
       this.game.removeEntity(this)
       // TODO: Remove all handlers etc?
     }
