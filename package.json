@@ -1,5 +1,5 @@
 {
-  "name": "primo-core",
+  "name": "primo",
   "version": "0.1.0",
   "description": "Core engine for PrimoJS",
   "main": "index.js",
