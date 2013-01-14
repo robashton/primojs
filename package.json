@@ -20,6 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "primo-events": "~1.0.0",
-    "underscore": "~1.4.3"
+    "underscore": "~1.4.3",
+    "primo-audio": "0.0.6"
   }
 }
