@@ -24,6 +24,8 @@
     "primo-audio": "0.0.6",
     "primo-camera": "~0.0.0",
     "primo-canvas": "~0.0.0",
-    "primo-spritemap": "0.0.0"
+    "primo-spritemap": "0.0.0",
+    "primo-counter": "0.0.0",
+    "primo-timer": "0.0.0"
   }
 }
