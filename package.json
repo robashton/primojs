@@ -22,6 +22,7 @@
     "primo-events": "~1.0.0",
     "underscore": "~1.4.3",
     "primo-audio": "0.0.6",
-    "primo-camera": "~0.0.0"
+    "primo-camera": "~0.0.0",
+    "primo-canvas": "~0.0.0"
   }
 }
