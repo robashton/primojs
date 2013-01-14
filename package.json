@@ -1,0 +1,25 @@
+{
+  "name": "primo-core",
+  "version": "0.0.5",
+  "description": "Core engine for PrimoJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/robashton/primo-core.git"
+  },
+  "keywords": [
+    "game",
+    "engine",
+    "html5",
+    "primo"
+  ],
+  "author": "Rob Ashton",
+  "license": "MIT",
+  "dependencies": {
+    "primo-events": "~1.0.0",
+    "underscore": "~1.4.3"
+  }
+}
