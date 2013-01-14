@@ -1,13 +1,13 @@
 var Eventable = require('primo-events')
 var _ = require('underscore')
 var Camera = require('primo-camera')
+var Timer = require('primo-timer')
 
 // Some of these will be modules
 var Level = require('./lib/level')
 var Input = require('./lib/input')
 var Resources = require('./lib/resources')
 var CollisionGrid = require('./lib/collisiongrid')
-var Timer = require('./lib/timer')
 
 var Runner = function(targetid) {
   Eventable.call(this)
