@@ -45,6 +45,7 @@ Runner.prototype = {
   },
   reset: function() {
     this.entities = []
+    this.clearListeners()
     this.layers = []
   },
   spawnEntity: function(Type, data)  {
@@ -68,10 +69,10 @@ Runner.prototype = {
     this.render()
   },
   tick: function() {
-    this.raise('tick')
-    var grid = new CollisionGrid(32)
-    for(var i = 0; i < this.entities.length; i++) {
-      var entity = this.entities[i]
+    this.raise('tick') 
+    var grid = new CollisionGrid(32) 
+    for(var i = 0; i < this.entities.length; i++) { 
+      var entity = this.entities[i] 
       entity.tick(this.frameTime)
       if(entity.collideable) {
 
