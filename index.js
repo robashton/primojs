@@ -1,8 +1,8 @@
 var Eventable = require('primo-events')
 var _ = require('underscore')
+var Camera = require('primo-camera')
 
 // Some of these will be modules
-var Camera = require('./lib/camera')
 var Level = require('./lib/level')
 var Input = require('./lib/input')
 var Resources = require('./lib/resources')
