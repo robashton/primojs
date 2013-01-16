@@ -27,5 +27,9 @@
     "primo-spritemap": "0.0.0",
     "primo-counter": "0.0.0",
     "primo-timer": "0.0.0"
+  },
+  "optionalDependencies": {
+    "primo-animation": "",
+    "primo-rigidbody": ""
   }
 }
