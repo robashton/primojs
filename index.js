@@ -3,8 +3,8 @@ var Game = require('./lib/game')
 
 module.exports = {
   DefineEntity: Entity.Define,
-  Create: function(targetId) {
-    return new Game(targetId)
+  Create: function(targetId, cfg) {
+    return new Game(targetId, cfg)
   }
 
 }
